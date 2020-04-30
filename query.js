@@ -1,22 +1,20 @@
 module.exports = {
-    GET_STRUCT = `
-        SELECT key, type, content
+    GET_STRUCT: `
+        SELECT id, type, content
         FROM struct
-        WHERE key = ?
+        WHERE id = ?
     `,
-    POST_STRUCT = `
-        SELECT key, type, content
-        FROM struct
-        WHERE key = ?
+    INSERT_STRUCT: `
+        INSERT INTO struct (id, type, content)
+        VALUES (?, ?, ?)
     `,
-    PUT_STRUCT = `
-        SELECT key, type, content
-        FROM struct
-        WHERE key = ?
+    UPDATE_STRUCT: `
+        UPDATE struct
+        SET type = ?, content = ?
+        WHERE id = ?
     `,
-    DELETE_STRUCT = `
-        SELECT key, type, content
-        FROM struct
-        WHERE key = ?
+    DELETE_STRUCT: `
+        DELETE FROM struct
+        WHERE id = ?
     `,
 }
