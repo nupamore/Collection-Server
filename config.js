@@ -8,4 +8,7 @@ module.exports = {
         port: process.env.DB_PORT,
         database: 'collection',
     },
+    auth: {
+        key: process.env.AUTH_KEY,
+    },
 }
