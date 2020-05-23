@@ -1,9 +1,9 @@
 const router = require('express').Router()
 const db = require('../db/driver')
 
-router.get('/members/:id', async (req, res) => {
+router.get('/haveCharacters/:id', async (req, res) => {
     try {
-        const result = await db.models.members.findOne({
+        const result = await db.models.haveCharacters.findOne({
             where: { id: req.params.id },
         })
         if (result)
@@ -24,12 +24,12 @@ router.get('/members/:id', async (req, res) => {
     }
 })
 
-router.post('/members/:id', async (req, res) => {
+router.post('/haveCharacters/:id', async (req, res) => {
     const form = req.body
     form.id = req.params.id
 
     try {
-        await db.models.members.create(form)
+        await db.models.haveCharacters.create(form)
         res.status(200).json({
             code: 200,
             data: '생성 성공',
@@ -42,9 +42,9 @@ router.post('/members/:id', async (req, res) => {
     }
 })
 
-router.put('/members/:id', async (req, res) => {
+router.put('/haveCharacters/:id', async (req, res) => {
     try {
-        const result = await db.models.members.findOne({
+        const result = await db.models.haveCharacters.findOne({
             where: { id: req.params.id },
         })
         if (!result) {
@@ -53,7 +53,7 @@ router.put('/members/:id', async (req, res) => {
                 message: '해당 아이디를 가진 데이터를 찾을 수 않음',
             })
         } else {
-            await db.models.members.update(req.body, {
+            await db.models.haveCharacters.update(req.body, {
                 where: { id: req.params.id },
             })
             res.status(200).json({
@@ -69,9 +69,9 @@ router.put('/members/:id', async (req, res) => {
     }
 })
 
-router.delete('/members/:delete', async (req, res) => {
+router.delete('/haveCharacters/:delete', async (req, res) => {
     try {
-        await db.models.members.destroy({
+        await db.models.haveCharacters.destroy({
             where: { id: req.params.id },
         })
         res.status(200).json({

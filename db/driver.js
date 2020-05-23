@@ -1,91 +1,25 @@
-const mysql = require('mysql2/promise')
+const fs = require('fs')
 const CONFIG = require('../config')
-const pool = mysql.createPool(CONFIG.db)
+const { Sequelize, DataTypes } = require('sequelize')
 
-async function read(queryStr, params) {
+const sequelize = new Sequelize(CONFIG.db)
+
+// define models
+const files = fs.readdirSync('models')
+const models = {}
+files.map(file => {
+    const define = require(`../models/${file}`)
+    models[file] = define(sequelize, DataTypes)
+})
+// connection test
+;(async () => {
     try {
-        const [rows] = await pool.query(queryStr, params)
-        if (rows.length)
-            return {
-                code: 200,
-                data: rows[0],
-            }
-        else
-            return {
-                code: 404,
-                message: '해당 아이디를 가진 데이터를 찾을 수 않음',
-            }
-    } catch (e) {
-        return {
-            code: e.errno,
-            message: e.message,
-        }
+        await sequelize.authenticate()
+        console.log('Connection has been established successfully.')
+    } catch (error) {
+        console.error('Unable to connect to the database:', error)
     }
-}
+})()
 
-async function insert(queryStr, params) {
-    try {
-        await pool.query(queryStr, params)
-        return {
-            code: 200,
-            message: '생성 성공',
-        }
-    } catch (e) {
-        return {
-            code: e.errno,
-            message: e.message,
-        }
-    }
-}
-
-async function update(queryStr, params) {
-    try {
-        const [{ changedRows }] = await pool.query(queryStr, params)
-        if (changedRows) {
-            return {
-                code: 200,
-                message: '수정 성공',
-            }
-        } else {
-            return {
-                code: 404,
-                message: '해당 아이디를 가진 데이터를 찾을 수 않음',
-            }
-        }
-    } catch (e) {
-        return {
-            code: e.errno,
-            message: e.message,
-        }
-    }
-}
-
-async function remove(queryStr, params) {
-    try {
-        const [{ affectedRows }] = await pool.query(queryStr, params)
-        if (affectedRows) {
-            return {
-                code: 200,
-                message: '삭제 성공',
-            }
-        } else {
-            return {
-                code: 404,
-                message: '해당 아이디를 가진 데이터를 찾을 수 않음',
-            }
-        }
-    } catch (e) {
-        return {
-            code: e.errno,
-            message: e.message,
-        }
-    }
-}
-
-module.exports = {
-    pool,
-    read,
-    insert,
-    update,
-    remove,
-}
+module.exports = sequelize
+exports.models = models

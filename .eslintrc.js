@@ -16,6 +16,7 @@ module.exports = {
         require: "readonly",
         __dirname: "readonly",
         module: "readonly",
+        exports: "readonly",
         BASE_URL: "readonly",
         USER_API_URL: "readonly"
     },

@@ -11,5 +11,7 @@ router.use((req, res, next) => {
         })
 })
 router.use(require('./api/members'))
+router.use(require('./api/haveCharacters'))
+router.use(require('./api/haveEquipments'))
 
 module.exports = router
