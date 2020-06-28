@@ -18,7 +18,10 @@ module.exports = {
         module: "readonly",
         exports: "readonly",
         BASE_URL: "readonly",
-        USER_API_URL: "readonly"
+        USER_API_URL: "readonly",
+        describe: "readonly",
+        it: "readonly",
+        afterAll: "readonly"
     },
     parserOptions: {
         ecmaVersion: 2018,
