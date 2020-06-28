@@ -10,8 +10,16 @@ jobs:
       - node/install-packages:
           pkg-manager: yarn
       - run:
-          command: yarn run test
+          name: Env
+          command: |
+            echo "export AUTH_KEY=$AUTH_KEY" >> $BASH_ENV
+            echo "export DB_HOST=$DB_HOST" >> $BASH_ENV
+            echo "export DB_PASS=$DB_PASS" >> $BASH_ENV
+            echo "export DB_PORT=$DB_PORT" >> $BASH_ENV
+            echo "export DB_USER=$DB_USER" >> $BASH_ENV
+      - run:
           name: Run YARN tests
+          command: yarn run test
 workflows:
     build-and-test:
       jobs:
