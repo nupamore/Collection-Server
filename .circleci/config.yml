@@ -27,11 +27,13 @@ jobs:
       - run:
           name: Deploy Over SSH
           command: |
-            ssh $SSH_USER@$SSH_HOST "./Collection-Server/deploy.sh"
+            ssh $SSH_USER@$SSH_HOST "./collection-deploy.sh"
 workflows:
     build-and-test:
       jobs:
         - build-and-test
     deploy:
       jobs:
-        - deploy
+        - deploy:
+          requires:
+            - build-and-test
