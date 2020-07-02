@@ -29,11 +29,7 @@ jobs:
           command: |
             ssh $SSH_USER@$SSH_HOST "./collection-deploy.sh"
 workflows:
-    build-and-test:
+    build-and-deploy:
       jobs:
         - build-and-test
-    deploy:
-      jobs:
-        - deploy:
-          requires:
-            - build-and-test
+        - deploy
