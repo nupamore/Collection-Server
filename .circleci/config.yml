@@ -22,12 +22,12 @@ jobs:
           command: yarn run test
   deploy:
     machine:
-       enabled: true
-     steps:
-       - run:
-           name: Deploy Over SSH
-           command: |
-             ssh $SSH_USER@$SSH_HOST "./Collection-Server/deploy.sh"
+      enabled: true
+    steps:
+      - run:
+          name: Deploy Over SSH
+          command: |
+            ssh $SSH_USER@$SSH_HOST "./Collection-Server/deploy.sh"
 workflows:
     build-and-test:
       jobs:
