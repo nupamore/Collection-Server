@@ -8,7 +8,7 @@ const defaultHeaders = {
 }
 
 describe('members', () => {
-    it('get all members', async done => {
+    it('get all members', async (done) => {
         await request(server)
             .get('/api/members')
             .set(defaultHeaders)
@@ -17,7 +17,7 @@ describe('members', () => {
 })
 
 describe('haveCharacters', () => {
-    it('get all characters', async done => {
+    it('get all characters', async (done) => {
         await request(server)
             .get('/api/haveCharacters')
             .set(defaultHeaders)
@@ -26,7 +26,7 @@ describe('haveCharacters', () => {
 })
 
 describe('haveEquipments', () => {
-    it('get all equipments', async done => {
+    it('get all equipments', async (done) => {
         await request(server)
             .get('/api/haveEquipments')
             .set(defaultHeaders)
@@ -34,7 +34,16 @@ describe('haveEquipments', () => {
     })
 })
 
-afterAll(async done => {
+describe('haveItems', () => {
+    it('get all items', async (done) => {
+        await request(server)
+            .get('/api/haveItems')
+            .set(defaultHeaders)
+        done()
+    })
+})
+
+afterAll(async (done) => {
     await server.close()
     done()
 })
