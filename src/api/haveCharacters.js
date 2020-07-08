@@ -1,9 +1,12 @@
 const router = require('express').Router()
 const db = require('../db/driver')
 
-router.get('/haveCharacters', async (req, res) => {
+// 특정 유저가 가진 캐릭터들을 가져오는 api
+router.get('/members/:memberId/haveCharacters', async (req, res) => {
     try {
-        const result = await db.models.haveCharacters.findAll()
+        const result = await db.models.haveCharacters.findAll({
+            where: { memberId: req.params.memberId },
+        })
         res.status(200).json({
             code: 200,
             data: result,
@@ -16,10 +19,11 @@ router.get('/haveCharacters', async (req, res) => {
     }
 })
 
-router.get('/haveCharacters/:id', async (req, res) => {
+// 특정 유저가 가진 특정 캐릭터를 가져오는 api
+router.get('/members/:memberId/haveCharacters/:charId', async (req, res) => {
     try {
         const result = await db.models.haveCharacters.findOne({
-            where: { id: req.params.id },
+            where: { memberId: req.params.memberId, charId: req.params.characterId },
         })
         if (result)
             res.status(200).json({
