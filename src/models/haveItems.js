@@ -2,14 +2,28 @@
 
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('haveItems', {
-    Id: {
+    id: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
-      primaryKey: true
+      primaryKey: true,
+      autoIncrement: true
     },
-    name: {
+    memberId: {
       type: DataTypes.STRING(50),
-      allowNull: true
+      allowNull: false
+    },
+    itemId: {
+      type: DataTypes.INTEGER(10).UNSIGNED,
+      allowNull: false
+    },
+    itemKey: {
+      type: DataTypes.INTEGER(10).UNSIGNED,
+      allowNull: false
+    },
+    stackNum: {
+      type: DataTypes.INTEGER(11).UNSIGNED,
+      allowNull: false,
+      defaultValue: '1'
     },
     createdAt: {
       type: DataTypes.DATE,

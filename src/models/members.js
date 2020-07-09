@@ -12,58 +12,58 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: true
     },
     level: {
-      type: DataTypes.INTEGER(10).UNSIGNED.ZEROFILL,
+      type: DataTypes.INTEGER(10).UNSIGNED,
       allowNull: false
     },
     exp: {
-      type: DataTypes.INTEGER(11).UNSIGNED.ZEROFILL,
+      type: DataTypes.INTEGER(11).UNSIGNED,
       allowNull: false
     },
     money: {
-      type: DataTypes.INTEGER(10).UNSIGNED.ZEROFILL,
+      type: DataTypes.INTEGER(10).UNSIGNED,
       allowNull: false
     },
     berry: {
-      type: DataTypes.INTEGER(11).UNSIGNED.ZEROFILL,
+      type: DataTypes.INTEGER(11).UNSIGNED,
       allowNull: false
     },
     stardust: {
-      type: DataTypes.INTEGER(11).UNSIGNED.ZEROFILL,
+      type: DataTypes.INTEGER(11).UNSIGNED,
       allowNull: false
     },
     maxClearBattleStage: {
-      type: DataTypes.INTEGER(11).UNSIGNED.ZEROFILL,
+      type: DataTypes.INTEGER(11).UNSIGNED,
       allowNull: false
     },
     lastSelectedChapter: {
-      type: DataTypes.INTEGER(10).UNSIGNED.ZEROFILL,
+      type: DataTypes.INTEGER(10).UNSIGNED,
       allowNull: false
     },
     maxOpenedChapter: {
-      type: DataTypes.INTEGER(10).UNSIGNED.ZEROFILL,
+      type: DataTypes.INTEGER(10).UNSIGNED,
       allowNull: false
     },
     lastSelectedParty: {
-      type: DataTypes.INTEGER(10).UNSIGNED.ZEROFILL,
+      type: DataTypes.INTEGER(10).UNSIGNED,
       allowNull: false
     },
     battleClearCount: {
-      type: DataTypes.INTEGER(10).UNSIGNED.ZEROFILL,
+      type: DataTypes.INTEGER(10).UNSIGNED,
       allowNull: false
     },
     getCharacterCount: {
-      type: DataTypes.INTEGER(10).UNSIGNED.ZEROFILL,
+      type: DataTypes.INTEGER(10).UNSIGNED,
       allowNull: false
     },
     maxHaveCharactersNum: {
-      type: DataTypes.INTEGER(10).UNSIGNED.ZEROFILL,
+      type: DataTypes.INTEGER(10).UNSIGNED,
       allowNull: false,
-      defaultValue: '0000000100'
+      defaultValue: '100'
     },
     maxHaveEquipmentsNum: {
-      type: DataTypes.INTEGER(10).UNSIGNED.ZEROFILL,
+      type: DataTypes.INTEGER(10).UNSIGNED,
       allowNull: false,
-      defaultValue: '0000000100'
+      defaultValue: '100'
     },
     index: {
       type: DataTypes.STRING(1000),
