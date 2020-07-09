@@ -12,7 +12,7 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING(50),
       allowNull: false
     },
-    characterID: {
+    characterId: {
       type: DataTypes.INTEGER(10).UNSIGNED.ZEROFILL,
       allowNull: false
     },
