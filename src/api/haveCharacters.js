@@ -21,9 +21,10 @@ router.get('/members/:memberId/haveCharacters', async (req, res) => {
 
 // 특정 유저가 가진 특정 캐릭터를 가져오는 api
 router.get('/members/:memberId/haveCharacters/:characterId', async (req, res) => {
+    const { memberId, characterId } = req.params
     try {
         const result = await db.models.haveCharacters.findOne({
-            where: { memberId: req.params.memberId, characterId: req.params.characterId },
+            where: { memberId, characterId },
         })
         if (result)
             res.status(200).json({
@@ -45,11 +46,14 @@ router.get('/members/:memberId/haveCharacters/:characterId', async (req, res) =>
 
 // 특정 유저에게 새로운 캐릭터들을 추가한다.
 router.post('/members/:memberId/haveCharacters', async (req, res) => {
-    const form = req.body
-    form.id = req.params.id
-
+    const { memberId } = req.params
+    const { characters } = req.body
+    characters.forEach(character => {
+        character.memberId = memberId  
+    })
+    
     try {
-        await db.models.haveCharacters.create(form)
+        await db.models.haveCharacters.bulkCreate(characters)
         res.status(200).json({
             code: 200,
             data: '생성 성공',
@@ -62,10 +66,12 @@ router.post('/members/:memberId/haveCharacters', async (req, res) => {
     }
 })
 
-router.put('/haveCharacters/:id', async (req, res) => {
+// 특정 유저가 가진 특정 캐릭터의 정보를 수정하는 api
+router.put('/members/:memberId/haveCharacters/:characterId', async (req, res) => {
+    const { memberId, characterId } = req.params
     try {
         const result = await db.models.haveCharacters.findOne({
-            where: { id: req.params.id },
+            where: { memberId, characterId },
         })
         if (!result) {
             res.status(404).json({
@@ -74,7 +80,7 @@ router.put('/haveCharacters/:id', async (req, res) => {
             })
         } else {
             await db.models.haveCharacters.update(req.body, {
-                where: { id: req.params.id },
+                where: { memberId, characterId },
             })
             res.status(200).json({
                 code: 200,
@@ -89,10 +95,12 @@ router.put('/haveCharacters/:id', async (req, res) => {
     }
 })
 
-router.delete('/haveCharacters/:delete', async (req, res) => {
+// 특정 유저가 가진 특정 캐릭터의 정보를 삭제하는 api
+router.delete('/members/:memberId/haveCharacters/:characterId', async (req, res) => {
+    const { memberId, characterId } = req.params
     try {
         await db.models.haveCharacters.destroy({
-            where: { id: req.params.id },
+            where: { memberId, characterId },
         })
         res.status(200).json({
             code: 200,
