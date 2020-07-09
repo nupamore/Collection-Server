@@ -20,10 +20,10 @@ router.get('/members/:memberId/haveCharacters', async (req, res) => {
 })
 
 // 특정 유저가 가진 특정 캐릭터를 가져오는 api
-router.get('/members/:memberId/haveCharacters/:charId', async (req, res) => {
+router.get('/members/:memberId/haveCharacters/:characterId', async (req, res) => {
     try {
         const result = await db.models.haveCharacters.findOne({
-            where: { memberId: req.params.memberId, charId: req.params.characterId },
+            where: { memberId: req.params.memberId, characterId: req.params.characterId },
         })
         if (result)
             res.status(200).json({
@@ -43,7 +43,8 @@ router.get('/members/:memberId/haveCharacters/:charId', async (req, res) => {
     }
 })
 
-router.post('/haveCharacters/:id', async (req, res) => {
+// 특정 유저에게 새로운 캐릭터들을 추가한다.
+router.post('/members/:memberId/haveCharacters', async (req, res) => {
     const form = req.body
     form.id = req.params.id
 
