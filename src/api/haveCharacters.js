@@ -99,35 +99,27 @@ router.put('/members/:memberId/haveCharacters/:characterId', async (req, res) =>
 router.put('/members/:memberId/haveCharacters', async (req, res) => {
     const { memberId } = req.params
     const { characters } = req.body
-    characters.forEach(character => {
-        const { characterId } = character.characterId
-
-        try {
-            const result = await db.models.haveCharacters.findOne({
-                where: { memberId, characterId },
-            })
-            if (!result) {
-                res.status(404).json({
-                    code: 404,
-                    message: '해당 아이디를 가진 데이터를 찾을 수 않음',
-                })
-            } else {
-                await db.models.haveCharacters.update(character, {
-                    where: { memberId, characterId },
-                })
-                res.status(200).json({
-                    code: 200,
-                    message: '수정 성공',
-                })
-            }
-        } catch (e) {
-            res.status(400).json({
-                code: 400,
-                message: e.toString(),
-            })
-        }
-
+    
+    const promises = characters.map(character => {
+        return db.models.haveCharacters.update({
+            where: {
+                memberId,
+                characterId: character.characterId,
+            },
+        })
     })
+    try {
+        await Promise.all(promises)
+        res.status(200).json({
+            code: 200,
+            message: '수정 성공',
+        })
+    } catch (e) {
+        res.status(400).json({
+            code: 400,
+            message: e.toString(),
+        })
+    }
 })
 
 // 특정 유저가 가진 특정 캐릭터의 정보를 삭제하는 api
