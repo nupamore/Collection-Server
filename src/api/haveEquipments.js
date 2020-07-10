@@ -1,9 +1,12 @@
 const router = require('express').Router()
 const db = require('../db/driver')
 
-router.get('/haveEquipments', async (req, res) => {
+// 특정 유저가 가진 장비들을 가져오는 api
+router.get('/members/:memberId/haveEquipments', async (req, res) => {
     try {
-        const result = await db.models.haveEquipments.findAll()
+        const result = await db.models.haveEquipments.findAll({
+            where: { memberId: req.params.memberId },
+        })
         res.status(200).json({
             code: 200,
             data: result,
@@ -39,12 +42,16 @@ router.get('/haveEquipments/:id', async (req, res) => {
     }
 })
 
-router.post('/haveEquipments/:id', async (req, res) => {
-    const form = req.body
-    form.id = req.params.id
+// 특정 유저에게 새로운 장비들을 추가하는 api
+router.post('/members/:memberId/haveEquipments', async (req, res) => {
+    const { memberId } = req.params
+    const { equipments } = req.body
+    equipments.forEach(equipment => {
+        equipment.memberId = memberId  
+    })
 
     try {
-        await db.models.haveEquipments.create(form)
+        await db.models.haveEquipments.bulkCreate(equipments)
         res.status(200).json({
             code: 200,
             data: '생성 성공',
