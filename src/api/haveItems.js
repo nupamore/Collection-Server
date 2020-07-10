@@ -26,12 +26,45 @@ router.post('/members/:memberId/haveItems', async (req, res) => {
     items.forEach(item => {
         item.memberId = memberId
     })
-
+    
+    const existItems = []
+    const notExistItems = []
+ 
     try {
-        await db.models.haveItems.bulkCreate(items)
+        // 존재하는 아이템 체크
+        const existPromises = items.map(item => {
+            return db.models.haveItems.findOne({
+                where: { 
+                    memberId,
+                    itemKey: item.itemKey
+                },
+            })
+        })
+        (await Promise.all(existPromises)).forEach((result, index) => {
+            if (result) existItems.push(items[index])
+            else notExistItems.push(items[index])
+        })
+    
+        // 레코드 삽입
+        const createPromise = db.models.haveItems.bulkCreate(notExistItems)
+        
+        // 레코드 업데이트
+        const updatePromises = existItems.map(existItem => {
+            return db.models.haveItems.update({
+                where: {
+                    memberId,
+                    itemKey: existItem.itemKey
+                },
+            })   
+        })
+        
+        await Promise.all([
+            createPromise,
+            ...updatePromises
+        ])
         res.status(200).json({
             code: 200,
-            data: '생성 성공',
+            data: '요청 성공',
         })
     } catch (e) {
         res.status(400).json({
