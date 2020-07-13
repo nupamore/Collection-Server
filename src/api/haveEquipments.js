@@ -47,7 +47,7 @@ router.post('/members/:memberId/haveEquipments', async (req, res) => {
     const { memberId } = req.params
     const { equipments } = req.body
     equipments.forEach(equipment => {
-        equipment.memberId = memberId  
+        equipment.memberId = memberId
     })
 
     try {
@@ -68,9 +68,9 @@ router.post('/members/:memberId/haveEquipments', async (req, res) => {
 router.put('/members/:memberId/haveEquipments', async (req, res) => {
     const { memberId } = req.params
     const { equipments } = req.body
-    
+
     const promises = equipments.map(equipment => {
-        return db.models.haveEquipments.update({
+        return db.models.haveEquipments.update(equipment, {
             where: {
                 memberId,
                 equipmentId: equipment.equipmentId,
@@ -139,7 +139,7 @@ router.put('/members/:memberId/haveEquipments', async (req, res) => {
 router.delete('/members/:memberId/haveEquipments', async (req, res) => {
     const { memberId } = req.params
     const { equipmentIds } = req.body
-    
+
     try {
         await db.models.haveEquipments.destroy({
             where: {
