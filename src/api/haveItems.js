@@ -1,11 +1,15 @@
 const router = require('express').Router()
 const db = require('../db/driver')
+const { Op } = require('sequelize')
 
 // 특정 유저가 가진 아이템들을 가져오는 api
 router.get('/members/:memberId/haveItems', async (req, res) => {
     try {
         const result = await db.models.haveItems.findAll({
-            where: { memberId: req.params.memberId },
+            where: {
+                memberId: req.params.memberId,
+                stackNum: { [Op.ne]: 0 },
+            },
         })
         res.status(200).json({
             code: 200,
