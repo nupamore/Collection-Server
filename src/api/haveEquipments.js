@@ -138,21 +138,18 @@ router.put('/members/:memberId/haveEquipments', async (req, res) => {
 // 특정 유저가 가진 장비들의 정보를 삭제하는 api
 router.delete('/members/:memberId/haveEquipments', async (req, res) => {
     const { memberId } = req.params
-    const { equipments } = req.body
+    const { equipmentIds } = req.body
     
-    const promises = equipments.map(equipment => {
-        return db.models.haveEquipments.destroy({
+    try {
+        db.models.haveEquipments.destroy({
             where: {
                 memberId,
-                equipmentId: equipment.equipmentId,
+                equipmentId: equipmentIds,
             },
         })
-    })
-    try {
-        await Promise.all(promises)
         res.status(200).json({
             code: 200,
-            message: '수정 성공',
+            message: '삭제 성공',
         })
     } catch (e) {
         res.status(400).json({
