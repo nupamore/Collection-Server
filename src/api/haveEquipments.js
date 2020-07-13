@@ -141,7 +141,7 @@ router.delete('/members/:memberId/haveEquipments', async (req, res) => {
     const { equipmentIds } = req.body
     
     try {
-        db.models.haveEquipments.destroy({
+        await db.models.haveEquipments.destroy({
             where: {
                 memberId,
                 equipmentId: equipmentIds,
