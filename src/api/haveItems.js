@@ -32,25 +32,25 @@ router.post('/members/:memberId/haveItems', async (req, res) => {
 
     try {
         // 존재하는 아이템 체크
-        const existPromises = items
-            .map(item => {
-                return db.models.haveItems.findOne({
-                    where: {
-                        memberId,
-                        itemKey: item.itemKey,
-                    },
-                })
-            })(await Promise.all(existPromises))
-            .forEach((result, index) => {
-                if (result) existItems.push(items[index])
-                else notExistItems.push(items[index])
+        const existPromises = items.map(item => {
+            return db.models.haveItems.findOne({
+                where: {
+                    memberId,
+                    itemKey: item.itemKey,
+                },
             })
+        })
+        ;(await Promise.all(existPromises)).forEach((result, index) => {
+            if (result) existItems.push([items[index], result.dataValues])
+            else notExistItems.push(items[index])
+        })
 
         // 레코드 삽입
         const createPromise = db.models.haveItems.bulkCreate(notExistItems)
 
         // 레코드 업데이트
-        const updatePromises = existItems.map(existItem => {
+        const updatePromises = existItems.map(([existItem, before]) => {
+            existItem.stackNum += before.stackNum
             return db.models.haveItems.update(existItem, {
                 where: {
                     memberId,
@@ -60,6 +60,55 @@ router.post('/members/:memberId/haveItems', async (req, res) => {
         })
 
         await Promise.all([createPromise, ...updatePromises])
+        res.status(200).json({
+            code: 200,
+            data: '요청 성공',
+        })
+    } catch (e) {
+        res.status(400).json({
+            code: 400,
+            message: e.toString(),
+        })
+    }
+})
+
+// 특정 유저의 아이템들을 삭제하는 api
+router.delete('/members/:memberId/haveItems', async (req, res) => {
+    const { memberId } = req.params
+    const { items } = req.body
+    items.forEach(item => {
+        item.memberId = memberId
+    })
+
+    try {
+        // 존재하는 아이템 체크
+        const existPromises = items.map(item => {
+            return db.models.haveItems.findOne({
+                where: {
+                    memberId,
+                    itemKey: item.itemKey,
+                },
+            })
+        })
+        const existItems = (await Promise.all(existPromises))
+            .filter(result => result)
+            .map((result, index) => {
+                return [items[index], result.dataValues]
+            })
+
+        // 레코드 빼기
+        const updatePromises = existItems.map(([existItem, before]) => {
+            existItem.stackNum = before.stackNum - existItem.stackNum
+            existItem.stackNum = existItem.stackNum < 0 ? 0 : 0
+            return db.models.haveItems.update(existItem, {
+                where: {
+                    memberId,
+                    itemKey: existItem.itemKey,
+                },
+            })
+        })
+
+        await Promise.all(updatePromises)
         res.status(200).json({
             code: 200,
             data: '요청 성공',
