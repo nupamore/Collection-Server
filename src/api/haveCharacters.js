@@ -144,21 +144,18 @@ router.delete('/members/:memberId/haveCharacters/:characterId', async (req, res)
 // 특정 유저가 가진 캐릭터들의 정보를 삭제하는 api
 router.delete('/members/:memberId/haveCharacters', async (req, res) => {
     const { memberId } = req.params
-    const { characters } = req.body
+    const { characterIds } = req.body
     
-    const promises = characters.map(character => {
-        return db.models.haveCharacters.destroy({
+    try {
+        await db.models.haveCharacters.destroy({
             where: {
                 memberId,
-                characterId: character.characterId,
+                characterId: characterIds,
             },
         })
-    })
-    try {
-        await Promise.all(promises)
         res.status(200).json({
             code: 200,
-            message: '수정 성공',
+            message: '삭제 성공',
         })
     } catch (e) {
         res.status(400).json({
