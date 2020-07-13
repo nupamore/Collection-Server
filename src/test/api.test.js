@@ -8,42 +8,42 @@ const defaultHeaders = {
 }
 
 describe('members', () => {
-    it('get all members', async (done) => {
-        await request(server)
+    it('get all members', async () => {
+        const { statusCode } = await request(server)
             .get('/api/members')
             .set(defaultHeaders)
-        done()
+        expect(statusCode).toBe(200)
     })
 })
 
 describe('haveCharacters', () => {
-    it('get all characters', async (done) => {
-        await request(server)
-            .get('/api/haveCharacters')
+    it('get test characters', async () => {
+        const { statusCode } = await request(server)
+            .get('/api/members/test/haveCharacters')
             .set(defaultHeaders)
-        done()
+        expect(statusCode).toBe(200)
     })
 })
 
 describe('haveEquipments', () => {
-    it('get all equipments', async (done) => {
-        await request(server)
-            .get('/api/haveEquipments')
+    it('get test equipments', async () => {
+        const { statusCode } = await request(server)
+            .get('/api/members/test/haveEquipments')
             .set(defaultHeaders)
-        done()
+        expect(statusCode).toBe(200)
     })
 })
 
 describe('haveItems', () => {
-    it('get all items', async (done) => {
-        await request(server)
-            .get('/api/haveItems')
+    it('get test items', async () => {
+        const { statusCode } = await request(server)
+            .get('/api/members/test/haveItems')
             .set(defaultHeaders)
-        done()
+        expect(statusCode).toBe(200)
     })
 })
 
-afterAll(async (done) => {
+afterAll(async done => {
     await server.close()
     done()
 })

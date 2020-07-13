@@ -21,6 +21,7 @@ module.exports = {
         USER_API_URL: "readonly",
         describe: "readonly",
         it: "readonly",
+        expect: "readonly",
         afterAll: "readonly"
     },
     parserOptions: {
