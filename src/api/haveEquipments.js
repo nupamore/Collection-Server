@@ -64,25 +64,25 @@ router.post('/members/:memberId/haveEquipments', async (req, res) => {
     }
 })
 
-router.put('/haveEquipments/:id', async (req, res) => {
-    try {
-        const result = await db.models.haveEquipments.findOne({
-            where: { id: req.params.id },
+// 특정 유저가 가진 장비들의 정보를 수정하는 api
+router.put('/members/:memberId/haveEquipments', async (req, res) => {
+    const { memberId } = req.params
+    const { equipments } = req.body
+    
+    const promises = equipments.map(equipment => {
+        return db.models.haveEquipments.update({
+            where: {
+                memberId,
+                equipmentId: equipment.equipmentId,
+            },
         })
-        if (!result) {
-            res.status(404).json({
-                code: 404,
-                message: '해당 아이디를 가진 데이터를 찾을 수 않음',
-            })
-        } else {
-            await db.models.haveEquipments.update(req.body, {
-                where: { id: req.params.id },
-            })
-            res.status(200).json({
-                code: 200,
-                message: '수정 성공',
-            })
-        }
+    })
+    try {
+        await Promise.all(promises)
+        res.status(200).json({
+            code: 200,
+            message: '수정 성공',
+        })
     } catch (e) {
         res.status(400).json({
             code: 400,
@@ -91,14 +91,68 @@ router.put('/haveEquipments/:id', async (req, res) => {
     }
 })
 
-router.delete('/haveEquipments/:delete', async (req, res) => {
-    try {
-        await db.models.haveEquipments.destroy({
-            where: { id: req.params.id },
+// router.put('/haveEquipments/:id', async (req, res) => {
+//     try {
+//         const result = await db.models.haveEquipments.findOne({
+//             where: { id: req.params.id },
+//         })
+//         if (!result) {
+//             res.status(404).json({
+//                 code: 404,
+//                 message: '해당 아이디를 가진 데이터를 찾을 수 않음',
+//             })
+//         } else {
+//             await db.models.haveEquipments.update(req.body, {
+//                 where: { id: req.params.id },
+//             })
+//             res.status(200).json({
+//                 code: 200,
+//                 message: '수정 성공',
+//             })
+//         }
+//     } catch (e) {
+//         res.status(400).json({
+//             code: 400,
+//             message: e.toString(),
+//         })
+//     }
+// })
+
+// router.delete('/haveEquipments/:delete', async (req, res) => {
+//     try {
+//         await db.models.haveEquipments.destroy({
+//             where: { id: req.params.id },
+//         })
+//         res.status(200).json({
+//             code: 200,
+//             message: '삭제 성공',
+//         })
+//     } catch (e) {
+//         res.status(400).json({
+//             code: 400,
+//             message: e.toString(),
+//         })
+//     }
+// })
+
+// 특정 유저가 가진 장비들의 정보를 삭제하는 api
+router.delete('/members/:memberId/haveEquipments', async (req, res) => {
+    const { memberId } = req.params
+    const { equipments } = req.body
+    
+    const promises = equipments.map(equipment => {
+        return db.models.haveEquipments.destroy({
+            where: {
+                memberId,
+                equipmentId: equipment.equipmentId,
+            },
         })
+    })
+    try {
+        await Promise.all(promises)
         res.status(200).json({
             code: 200,
-            message: '삭제 성공',
+            message: '수정 성공',
         })
     } catch (e) {
         res.status(400).json({
