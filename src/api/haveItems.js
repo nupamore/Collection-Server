@@ -103,7 +103,7 @@ router.delete('/members/:memberId/haveItems', async (req, res) => {
         // 레코드 빼기
         const updatePromises = existItems.map(([existItem, before]) => {
             existItem.stackNum = before.stackNum - existItem.stackNum
-            existItem.stackNum = existItem.stackNum < 0 ? 0 : 0
+            existItem.stackNum = existItem.stackNum < 0 ? 0 : existItem.stackNum
             return db.models.haveItems.update(existItem, {
                 where: {
                     memberId,
