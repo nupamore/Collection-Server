@@ -1,4 +1,4 @@
-package routes
+package services
 
 import (
 	"net/http"
@@ -6,6 +6,9 @@ import (
 
 	"github.com/labstack/echo"
 )
+
+// ItemService : Items services
+type ItemService struct{}
 
 type (
 	item struct {
@@ -23,7 +26,8 @@ var (
 	}
 )
 
-func (router) getItem(c echo.Context) error {
+// GetItem : get a item
+func (ItemService) GetItem(c echo.Context) error {
 	id, _ := strconv.Atoi(c.Param("id"))
 	return c.JSON(http.StatusOK, items[id])
 }
