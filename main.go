@@ -1,35 +1,18 @@
 package main
 
 import (
-	"net/http"
-	"strconv"
-
+	"github.com/joho/godotenv"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
+
+	"github.com/nupamore/Collection-Server/routes"
 )
 
-type (
-	user struct {
-		ID   int    `json:"id"`
-		Name string `json:"name"`
-	}
-)
-
-var (
-	users = map[int]*user{}
-)
-
-func getUser(c echo.Context) error {
-	id, _ := strconv.Atoi(c.Param("id"))
-	return c.JSON(http.StatusOK, users[id])
+func init() {
+	godotenv.Load(".env")
 }
 
 func main() {
-	// test
-	users[123] = &user{
-		ID: 123,
-	}
-
 	e := echo.New()
 
 	// Middleware
@@ -37,7 +20,7 @@ func main() {
 	e.Use(middleware.Recover())
 
 	// Routes
-	e.GET("/users/:id", getUser)
+	routes.Routes(e.Group(""))
 
 	// Start server
 	e.Logger.Fatal(e.Start(":9001"))
