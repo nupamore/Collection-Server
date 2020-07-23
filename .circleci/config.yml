@@ -10,10 +10,9 @@ jobs:
       - checkout
       - go/load-cache
       - go/mod-download
+      - run: go get -u github.com/swaggo/swag/cmd/swag
+      - run: swag init
       - go/save-cache
-      - run:
-          name: generate swagger docs
-          command: swag init
       - go/test:
           covermode: atomic
           failfast: true
