@@ -6,7 +6,7 @@ import (
 
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql" // mysql driver
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 )
 
 // Connect : Database connect

@@ -1,7 +1,8 @@
 package response
 
-// Response : Response struct
-type Response struct {
-	Code    int
-	Message string
+// JSONResult : Response struct
+type JSONResult struct {
+	Code    int         `json:"code" `
+	Message string      `json:"message"`
+	Data    interface{} `json:"data"`
 }
