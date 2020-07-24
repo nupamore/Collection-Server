@@ -76,3 +76,51 @@ func (MemberCtrl) GetMember(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, res)
 }
+
+// UpdateMember : UpdateMember
+// @Summary 특정 멤버를 수정한다
+// @Param memberID path int true "멤버 아이디"
+// @Param json body models.Member true "멤버 모델"
+// @Success 0
+// @Failure 9001
+// @Router /members/{memberID} [put]
+func (MemberCtrl) UpdateMember(c echo.Context) error {
+	var res response.JSONResult
+	var before, after models.Member
+	db, _ := c.Get("db").(*gorm.DB)
+	id := c.Param("memberID")
+
+	if err := db.Where("id = ?", id).First(&before).Error; gorm.IsRecordNotFoundError(err) {
+		res.Code = response.StatusNotExist
+		res.Message = response.StatusText(res.Code)
+	} else {
+		c.Bind(&after)
+		db.Model(&before).Update(after)
+		res.Message = response.StatusText(response.StatusUpdated)
+	}
+
+	return c.JSON(http.StatusOK, res)
+}
+
+// DeleteMember : DeleteMember
+// @Summary 특정 멤버를 삭제한다
+// @Param memberID path int true "멤버 아이디"
+// @Success 0
+// @Failure 9001
+// @Router /members/{memberID} [delete]
+func (MemberCtrl) DeleteMember(c echo.Context) error {
+	var res response.JSONResult
+	var member models.Member
+	db, _ := c.Get("db").(*gorm.DB)
+	id := c.Param("memberID")
+
+	if err := db.Where("id = ?", id).First(&member).Error; gorm.IsRecordNotFoundError(err) {
+		res.Code = response.StatusNotExist
+		res.Message = response.StatusText(res.Code)
+	} else {
+		db.Delete(member)
+		res.Message = response.StatusText(response.StatusDeleted)
+	}
+
+	return c.JSON(http.StatusOK, res)
+}

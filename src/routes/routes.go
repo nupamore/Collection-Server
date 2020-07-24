@@ -11,8 +11,8 @@ func Routes(g *echo.Group) {
 	g.GET("/members", m.GetAllMembers)
 	g.POST("/members", m.CreateMember)
 	g.GET("/members/:memberID", m.GetMember)
-	// g.PUT("/members/:memberID", m.UpdateMember)
-	// g.DELETE("/members/:memberID", m.DeleteMember)
+	g.PUT("/members/:memberID", m.UpdateMember)
+	g.DELETE("/members/:memberID", m.DeleteMember)
 
 	var i controllers.ItemCtrl
 	g.GET("/members/:memberID/items", i.GetUsersItems)
