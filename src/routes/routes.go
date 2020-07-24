@@ -16,4 +16,5 @@ func Routes(g *echo.Group) {
 
 	var i controllers.ItemCtrl
 	g.GET("/members/:memberID/items", i.GetUsersItems)
+	g.POST("/members/:memberID/items", i.AddUsersItems)
 }
