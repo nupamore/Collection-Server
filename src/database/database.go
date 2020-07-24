@@ -3,6 +3,8 @@ package database
 import (
 	"fmt"
 	"os"
+	"regexp"
+	"strconv"
 
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql" // mysql driver
@@ -36,4 +38,13 @@ func ContextDB(db *gorm.DB) echo.MiddlewareFunc {
 			return next(c)
 		}
 	}
+}
+
+// ParseError : gorm error to code, message
+func ParseError(err error) (int, string) {
+	r := regexp.MustCompile("Error ([0-9]*): (.*)")
+	str := err.Error()
+	code, _ := strconv.Atoi(r.ReplaceAllString(str, "$1"))
+	message := r.ReplaceAllString(str, "$2")
+	return code, message
 }
