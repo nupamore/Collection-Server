@@ -8,6 +8,7 @@ import (
 	"github.com/nupamore/Collection-Server/src/controllers/response"
 	"github.com/nupamore/Collection-Server/src/database"
 	"github.com/nupamore/Collection-Server/src/database/models"
+	"github.com/nupamore/Collection-Server/src/services"
 )
 
 // MemberCtrl : Members controller
@@ -63,18 +64,16 @@ func (MemberCtrl) CreateMember(c echo.Context) error {
 // @Router /members/{memberId} [get]
 func (MemberCtrl) GetMember(c echo.Context) error {
 	var res response.JSONResult
-	var member models.Member
 	id := c.Param("memberId")
-	db, _ := c.Get("db").(*gorm.DB)
 
-	if err := db.Where("id = ?", id).First(&member).Error; gorm.IsRecordNotFoundError(err) {
-		res.Code = response.StatusNotExist
-		res.Message = response.StatusText(res.Code)
-	} else {
-		res.Data = member
+	member, err := services.Init(c).ValidMember(id)
+	if err != nil {
+		return err
 	}
+	res.Data = member
 
 	return c.JSON(http.StatusOK, res)
+
 }
 
 // UpdateMember : UpdateMember
@@ -86,18 +85,18 @@ func (MemberCtrl) GetMember(c echo.Context) error {
 // @Router /members/{memberId} [put]
 func (MemberCtrl) UpdateMember(c echo.Context) error {
 	var res response.JSONResult
-	var before, after models.Member
 	db, _ := c.Get("db").(*gorm.DB)
 	id := c.Param("memberId")
 
-	if err := db.Where("id = ?", id).First(&before).Error; gorm.IsRecordNotFoundError(err) {
-		res.Code = response.StatusNotExist
-		res.Message = response.StatusText(res.Code)
-	} else {
-		c.Bind(&after)
-		db.Model(&before).Update(after)
-		res.Message = response.StatusText(response.StatusUpdated)
+	before, err := services.Init(c).ValidMember(id)
+	if err != nil {
+		return err
 	}
+
+	var after models.Member
+	c.Bind(&after)
+	db.Model(&before).Update(after)
+	res.Message = response.StatusText(response.StatusUpdated)
 
 	return c.JSON(http.StatusOK, res)
 }
@@ -110,17 +109,15 @@ func (MemberCtrl) UpdateMember(c echo.Context) error {
 // @Router /members/{memberId} [delete]
 func (MemberCtrl) DeleteMember(c echo.Context) error {
 	var res response.JSONResult
-	var member models.Member
 	db, _ := c.Get("db").(*gorm.DB)
 	id := c.Param("memberId")
 
-	if err := db.Where("id = ?", id).First(&member).Error; gorm.IsRecordNotFoundError(err) {
-		res.Code = response.StatusNotExist
-		res.Message = response.StatusText(res.Code)
-	} else {
-		db.Delete(member)
-		res.Message = response.StatusText(response.StatusDeleted)
+	member, err := services.Init(c).ValidMember(id)
+	if err != nil {
+		return err
 	}
+	db.Delete(member)
+	res.Message = response.StatusText(response.StatusDeleted)
 
 	return c.JSON(http.StatusOK, res)
 }
