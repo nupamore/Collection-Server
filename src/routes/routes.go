@@ -24,4 +24,10 @@ func Routes(g *echo.Group) {
 	g.POST("/members/:memberId/characters", c.CreateUsersCharacters)
 	g.PUT("/members/:memberId/characters", c.UpdateUsersCharacters)
 	g.DELETE("/members/:memberId/characters", c.DeleteUsersCharacters)
+
+	var e controllers.EquipCtrl
+	g.GET("/members/:memberId/equipments", e.GetUsersEquipments)
+	g.POST("/members/:memberId/equipments", e.CreateUsersEquipments)
+	g.PUT("/members/:memberId/equipments", e.UpdateUsersEquipments)
+	g.DELETE("/members/:memberId/equipments", e.DeleteUsersEquipments)
 }
