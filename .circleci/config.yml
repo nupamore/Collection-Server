@@ -17,7 +17,18 @@ jobs:
           covermode: atomic
           failfast: true
           race: true
+  deploy:
+    machine:
+      enabled: true
+    steps:
+      - run:
+          name: Deploy Over SSH
+          command: |
+            ssh $SSH_USER@$SSH_HOST "./collection-deploy-go.sh"
 workflows:
   main:
     jobs:
       - build
+      - deploy:
+            requires:
+              - build

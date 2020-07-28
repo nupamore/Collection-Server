@@ -16,9 +16,9 @@ func init() {
 }
 
 // @title Collection API
-// @version 1.0
+// @version 2.0
 // @host collection.nupa.moe
-// @BasePath /api
+// @BasePath /api/v2
 func main() {
 	db := database.Connect()
 	defer db.Close()
@@ -34,5 +34,5 @@ func main() {
 	routes.Routes(e.Group(""))
 
 	// Start server
-	e.Logger.Fatal(e.Start(":9001"))
+	e.Logger.Fatal(e.Start(":9002"))
 }
