@@ -31,7 +31,7 @@ func main() {
 
 	// Routes
 	e.GET("/swagger/*", echoSwagger.WrapHandler)
-	routes.Routes(e.Group(""))
+	routes.Routes(e.Group("/api/v2"))
 
 	// Start server
 	e.Logger.Fatal(e.Start(":9002"))
