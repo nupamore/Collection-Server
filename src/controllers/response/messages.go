@@ -7,7 +7,10 @@ const (
 	StatusCreated  = 9002
 	StatusUpdated  = 9003
 	StatusDeleted  = 9004
-	StatusError    = 9999
+	// member
+	StatusNotExistMember = 9011
+	// etc
+	StatusError = 9999
 )
 
 var statusText = map[int]string{
@@ -16,7 +19,10 @@ var statusText = map[int]string{
 	StatusCreated:  "생성됨",
 	StatusUpdated:  "수정됨",
 	StatusDeleted:  "삭제됨",
-	StatusError:    "에러",
+	// member
+	StatusNotExistMember: "해당 멤버가 존재하지 않음",
+	// etc
+	StatusError: "에러",
 }
 
 // StatusText returns a text

@@ -14,14 +14,14 @@ import (
 type ItemCtrl struct{}
 
 type itemsRequest struct {
-	Items []models.Item
+	Items []models.Item `json:"items"`
 }
 
 // GetUsersItems : GetUsersItems
 // @Summary 특정 유저가 가진 모든 아이템들을 가져온다
 // @Param memberId path string true "멤버 아이디"
 // @Success 0 {object} response.JSONResult{data=[]models.Item}
-// @Failure 9001
+// @Failure 9011
 // @Router /members/{memberId}/items [get]
 func (ItemCtrl) GetUsersItems(c echo.Context) error {
 	var res response.JSONResult
@@ -29,8 +29,7 @@ func (ItemCtrl) GetUsersItems(c echo.Context) error {
 	memberID := c.Param("memberId")
 	db, _ := c.Get("db").(*gorm.DB)
 
-	member, err := services.Init(c).ValidMember(memberID)
-	if err != nil {
+	if _, err := services.Init(c).ValidMember(memberID); err != nil {
 		return err
 	}
 
@@ -45,7 +44,7 @@ func (ItemCtrl) GetUsersItems(c echo.Context) error {
 // @Param memberId path string true "멤버 아이디"
 // @Param body body itemsRequest true "아이템 모델"
 // @Success 0
-// @Failure 9001
+// @Failure 9011
 // @Router /members/{memberId}/items [post]
 func (ItemCtrl) AddUsersItems(c echo.Context) error {
 	var res response.JSONResult
@@ -84,7 +83,7 @@ func (ItemCtrl) AddUsersItems(c echo.Context) error {
 // @Param memberID path string true "멤버 아이디"
 // @Param body body itemsRequest true "아이템 모델"
 // @Success 0
-// @Failure 9001
+// @Failure 9011
 // @Router /members/{memberId}/items [delete]]
 func (ItemCtrl) SubtractUsersItems(c echo.Context) error {
 	var res response.JSONResult

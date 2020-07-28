@@ -60,7 +60,7 @@ func (MemberCtrl) CreateMember(c echo.Context) error {
 // @Summary 특정 멤버 정보를 불러온다
 // @Param memberId path string true "멤버 아이디"
 // @Success 0 {object} response.JSONResult{data=models.Member}
-// @Failure 9001
+// @Failure 9011
 // @Router /members/{memberId} [get]
 func (MemberCtrl) GetMember(c echo.Context) error {
 	var res response.JSONResult
@@ -81,7 +81,7 @@ func (MemberCtrl) GetMember(c echo.Context) error {
 // @Param memberId path string true "멤버 아이디"
 // @Param body body models.Member true "멤버 모델"
 // @Success 0
-// @Failure 9001
+// @Failure 9011
 // @Router /members/{memberId} [put]
 func (MemberCtrl) UpdateMember(c echo.Context) error {
 	var res response.JSONResult
@@ -105,7 +105,7 @@ func (MemberCtrl) UpdateMember(c echo.Context) error {
 // @Summary 특정 멤버를 삭제한다
 // @Param memberId path string true "멤버 아이디"
 // @Success 0
-// @Failure 9001
+// @Failure 9011
 // @Router /members/{memberId} [delete]
 func (MemberCtrl) DeleteMember(c echo.Context) error {
 	var res response.JSONResult

@@ -29,7 +29,7 @@ func (Service) ValidMember(memberID string) (models.Member, error) {
 	var member models.Member
 
 	if err := db.Where("id = ?", memberID).First(&member).Error; gorm.IsRecordNotFoundError(err) {
-		res.Code = response.StatusNotExist
+		res.Code = response.StatusNotExistMember
 		res.Message = response.StatusText(res.Code)
 		ctx.JSON(http.StatusOK, res)
 		return member, errors.New(res.Message)
