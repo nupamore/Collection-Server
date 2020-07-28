@@ -4,7 +4,6 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
-	echoSwagger "github.com/swaggo/echo-swagger"
 
 	_ "github.com/nupamore/Collection-Server/docs"
 	"github.com/nupamore/Collection-Server/src/database"
@@ -30,7 +29,6 @@ func main() {
 	e.Use(database.ContextDB(db))
 
 	// Routes
-	e.GET("/swagger/*", echoSwagger.WrapHandler)
 	routes.Routes(e.Group("/api/v2"))
 
 	// Start server

@@ -3,10 +3,13 @@ package routes
 import (
 	"github.com/labstack/echo/v4"
 	"github.com/nupamore/Collection-Server/src/controllers"
+	echoSwagger "github.com/swaggo/echo-swagger"
 )
 
 // Routes : Init Routes
 func Routes(g *echo.Group) {
+	g.GET("/swagger/*", echoSwagger.WrapHandler)
+
 	var m controllers.MemberCtrl
 	g.GET("/members", m.GetAllMembers)
 	g.POST("/members", m.CreateMember)
