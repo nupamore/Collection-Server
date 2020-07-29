@@ -10,8 +10,8 @@ import (
 	"github.com/nupamore/Collection-Server/src/services"
 )
 
-// ItemCtrl : Items controller
-type ItemCtrl struct{}
+// Item : Items controller
+type Item struct{}
 
 type itemsRequest struct {
 	Items []models.Item `json:"items"`
@@ -23,14 +23,14 @@ type itemsRequest struct {
 // @Success 0 {object} response.JSONResult{data=[]models.Item}
 // @Failure 9011
 // @Router /members/{memberId}/items [get]
-func (ItemCtrl) GetUsersItems(c echo.Context) error {
+func (Item) GetUsersItems(c echo.Context) error {
 	var res response.JSONResult
 	var items []models.Item
 	memberID := c.Param("memberId")
 	db, _ := c.Get("db").(*gorm.DB)
 
-	if _, err := services.Init(c).ValidMember(memberID); err != nil {
-		return err
+	if _, err := services.ValidMember(memberID); err.Code != 0 {
+		return c.JSON(http.StatusOK, err)
 	}
 
 	db.Where("memberId = ? AND stackNum > 0", memberID).Find(&items)
@@ -46,15 +46,15 @@ func (ItemCtrl) GetUsersItems(c echo.Context) error {
 // @Success 0
 // @Failure 9011
 // @Router /members/{memberId}/items [post]
-func (ItemCtrl) AddUsersItems(c echo.Context) error {
+func (Item) AddUsersItems(c echo.Context) error {
 	var res response.JSONResult
 	var req itemsRequest
 	var befores, afters []models.Item
 	memberID := c.Param("memberId")
 	db, _ := c.Get("db").(*gorm.DB)
 
-	if _, err := services.Init(c).ValidMember(memberID); err != nil {
-		return err
+	if _, err := services.ValidMember(memberID); err.Code != 0 {
+		return c.JSON(http.StatusOK, err)
 	}
 
 	c.Bind(&req)
@@ -85,15 +85,15 @@ func (ItemCtrl) AddUsersItems(c echo.Context) error {
 // @Success 0
 // @Failure 9011
 // @Router /members/{memberId}/items [delete]]
-func (ItemCtrl) SubtractUsersItems(c echo.Context) error {
+func (Item) SubtractUsersItems(c echo.Context) error {
 	var res response.JSONResult
 	var req itemsRequest
 	var befores, afters []models.Item
 	memberID := c.Param("memberId")
 	db, _ := c.Get("db").(*gorm.DB)
 
-	if _, err := services.Init(c).ValidMember(memberID); err != nil {
-		return err
+	if _, err := services.ValidMember(memberID); err.Code != 0 {
+		return c.JSON(http.StatusOK, err)
 	}
 
 	c.Bind(&req)

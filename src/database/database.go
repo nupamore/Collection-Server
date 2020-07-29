@@ -11,6 +11,9 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+// DB : Database context
+var DB *gorm.DB
+
 // Connect : Database connect
 func Connect() *gorm.DB {
 	dbTargetStr := fmt.Sprintf("%s:%s@(%s)/%s?%s",
@@ -27,6 +30,7 @@ func Connect() *gorm.DB {
 		panic(err)
 	}
 
+	DB = db
 	return db
 }
 

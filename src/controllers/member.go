@@ -11,14 +11,14 @@ import (
 	"github.com/nupamore/Collection-Server/src/services"
 )
 
-// MemberCtrl : Members controller
-type MemberCtrl struct{}
+// Member : Members controller
+type Member struct{}
 
 // GetAllMembers : GetAllMembers
 // @Summary 모든 멤버 목록을 불러온다
 // @Success 0 {object} response.JSONResult{data=[]models.Member}
 // @Router /members [get]
-func (MemberCtrl) GetAllMembers(c echo.Context) error {
+func (Member) GetAllMembers(c echo.Context) error {
 	var res response.JSONResult
 	var members []models.Member
 	db, _ := c.Get("db").(*gorm.DB)
@@ -34,7 +34,7 @@ func (MemberCtrl) GetAllMembers(c echo.Context) error {
 // @Param body body models.Member true "멤버 모델"
 // @Success 0
 // @Router /members [post]
-func (MemberCtrl) CreateMember(c echo.Context) error {
+func (Member) CreateMember(c echo.Context) error {
 	var res response.JSONResult
 	var member models.Member
 	db, _ := c.Get("db").(*gorm.DB)
@@ -62,13 +62,13 @@ func (MemberCtrl) CreateMember(c echo.Context) error {
 // @Success 0 {object} response.JSONResult{data=models.Member}
 // @Failure 9011
 // @Router /members/{memberId} [get]
-func (MemberCtrl) GetMember(c echo.Context) error {
+func (Member) GetMember(c echo.Context) error {
 	var res response.JSONResult
 	id := c.Param("memberId")
 
-	member, err := services.Init(c).ValidMember(id)
-	if err != nil {
-		return err
+	member, err := services.ValidMember(id)
+	if err.Code != 0 {
+		return c.JSON(http.StatusOK, err)
 	}
 	res.Data = member
 
@@ -83,14 +83,14 @@ func (MemberCtrl) GetMember(c echo.Context) error {
 // @Success 0
 // @Failure 9011
 // @Router /members/{memberId} [put]
-func (MemberCtrl) UpdateMember(c echo.Context) error {
+func (Member) UpdateMember(c echo.Context) error {
 	var res response.JSONResult
 	db, _ := c.Get("db").(*gorm.DB)
 	id := c.Param("memberId")
 
-	before, err := services.Init(c).ValidMember(id)
-	if err != nil {
-		return err
+	before, err := services.ValidMember(id)
+	if err.Code != 0 {
+		return c.JSON(http.StatusOK, err)
 	}
 
 	var after models.Member
@@ -107,14 +107,14 @@ func (MemberCtrl) UpdateMember(c echo.Context) error {
 // @Success 0
 // @Failure 9011
 // @Router /members/{memberId} [delete]
-func (MemberCtrl) DeleteMember(c echo.Context) error {
+func (Member) DeleteMember(c echo.Context) error {
 	var res response.JSONResult
 	db, _ := c.Get("db").(*gorm.DB)
 	id := c.Param("memberId")
 
-	member, err := services.Init(c).ValidMember(id)
-	if err != nil {
-		return err
+	member, err := services.ValidMember(id)
+	if err.Code != 0 {
+		return c.JSON(http.StatusOK, err)
 	}
 	db.Delete(member)
 	res.Message = response.StatusText(response.StatusDeleted)

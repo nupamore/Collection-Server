@@ -12,8 +12,8 @@ import (
 	"github.com/nupamore/Collection-Server/src/database/models"
 )
 
-// CharCtrl : Characters controller
-type CharCtrl struct{}
+// Char : Characters controller
+type Char struct{}
 
 type charsRequest struct {
 	Characters []models.Character `json:"characters"`
@@ -25,14 +25,14 @@ type charsRequest struct {
 // @Success 0 {object} response.JSONResult{data=[]models.Character}
 // @Failure 9011
 // @Router /members/{memberId}/characters [get]
-func (CharCtrl) GetUsersCharacters(c echo.Context) error {
+func (Char) GetUsersCharacters(c echo.Context) error {
 	var res response.JSONResult
 	var chars []models.Character
 	memberID := c.Param("memberId")
 	db, _ := c.Get("db").(*gorm.DB)
 
-	if _, err := services.Init(c).ValidMember(memberID); err != nil {
-		return err
+	if _, err := services.ValidMember(memberID); err.Code != 0 {
+		return c.JSON(http.StatusOK, err)
 	}
 
 	db.Where("memberId = ?", memberID).Find(&chars)
@@ -48,14 +48,14 @@ func (CharCtrl) GetUsersCharacters(c echo.Context) error {
 // @Success 0
 // @Failure 9011
 // @Router /members/{memberId}/characters [post]
-func (CharCtrl) CreateUsersCharacters(c echo.Context) error {
+func (Char) CreateUsersCharacters(c echo.Context) error {
 	var res response.JSONResult
 	var req charsRequest
 	memberID := c.Param("memberId")
 	db, _ := c.Get("db").(*gorm.DB)
 
-	if _, err := services.Init(c).ValidMember(memberID); err != nil {
-		return err
+	if _, err := services.ValidMember(memberID); err.Code != 0 {
+		return c.JSON(http.StatusOK, err)
 	}
 
 	c.Bind(&req)
@@ -83,14 +83,14 @@ func (CharCtrl) CreateUsersCharacters(c echo.Context) error {
 // @Failure 9001
 // @Failure 9011
 // @Router /members/{memberId}/characters [put]
-func (CharCtrl) UpdateUsersCharacters(c echo.Context) error {
+func (Char) UpdateUsersCharacters(c echo.Context) error {
 	var res response.JSONResult
 	var req charsRequest
 	memberID := c.Param("memberId")
 	db, _ := c.Get("db").(*gorm.DB)
 
-	if _, err := services.Init(c).ValidMember(memberID); err != nil {
-		return err
+	if _, err := services.ValidMember(memberID); err.Code != 0 {
+		return c.JSON(http.StatusOK, err)
 	}
 
 	c.Bind(&req)
@@ -123,14 +123,14 @@ func (CharCtrl) UpdateUsersCharacters(c echo.Context) error {
 // @Success 0
 // @Failure 9011
 // @Router /members/{memberId}/characters [delete]
-func (CharCtrl) DeleteUsersCharacters(c echo.Context) error {
+func (Char) DeleteUsersCharacters(c echo.Context) error {
 	var res response.JSONResult
 	var req charsRequest
 	memberID := c.Param("memberId")
 	db, _ := c.Get("db").(*gorm.DB)
 
-	if _, err := services.Init(c).ValidMember(memberID); err != nil {
-		return err
+	if _, err := services.ValidMember(memberID); err.Code != 0 {
+		return c.JSON(http.StatusOK, err)
 	}
 
 	c.Bind(&req)

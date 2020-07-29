@@ -12,8 +12,8 @@ import (
 	"github.com/nupamore/Collection-Server/src/database/models"
 )
 
-// EquipCtrl : Equipments controller
-type EquipCtrl struct{}
+// Equip : Equipments controller
+type Equip struct{}
 
 type equipsRequest struct {
 	Equipments []models.Equipment `json:"equipments"`
@@ -25,14 +25,14 @@ type equipsRequest struct {
 // @Success 0 {object} response.JSONResult{data=[]models.Equipment}
 // @Failure 9011
 // @Router /members/{memberId}/equipments [get]
-func (EquipCtrl) GetUsersEquipments(c echo.Context) error {
+func (Equip) GetUsersEquipments(c echo.Context) error {
 	var res response.JSONResult
 	var equips []models.Equipment
 	memberID := c.Param("memberId")
 	db, _ := c.Get("db").(*gorm.DB)
 
-	if _, err := services.Init(c).ValidMember(memberID); err != nil {
-		return err
+	if _, err := services.ValidMember(memberID); err.Code != 0 {
+		return c.JSON(http.StatusOK, err)
 	}
 
 	db.Where("memberId = ?", memberID).Find(&equips)
@@ -48,14 +48,14 @@ func (EquipCtrl) GetUsersEquipments(c echo.Context) error {
 // @Success 0
 // @Failure 9011
 // @Router /members/{memberId}/equipments [post]
-func (EquipCtrl) CreateUsersEquipments(c echo.Context) error {
+func (Equip) CreateUsersEquipments(c echo.Context) error {
 	var res response.JSONResult
 	var req equipsRequest
 	memberID := c.Param("memberId")
 	db, _ := c.Get("db").(*gorm.DB)
 
-	if _, err := services.Init(c).ValidMember(memberID); err != nil {
-		return err
+	if _, err := services.ValidMember(memberID); err.Code != 0 {
+		return c.JSON(http.StatusOK, err)
 	}
 
 	c.Bind(&req)
@@ -83,14 +83,14 @@ func (EquipCtrl) CreateUsersEquipments(c echo.Context) error {
 // @Failure 9001
 // @Failure 9011
 // @Router /members/{memberId}/equipments [put]
-func (EquipCtrl) UpdateUsersEquipments(c echo.Context) error {
+func (Equip) UpdateUsersEquipments(c echo.Context) error {
 	var res response.JSONResult
 	var req equipsRequest
 	memberID := c.Param("memberId")
 	db, _ := c.Get("db").(*gorm.DB)
 
-	if _, err := services.Init(c).ValidMember(memberID); err != nil {
-		return err
+	if _, err := services.ValidMember(memberID); err.Code != 0 {
+		return c.JSON(http.StatusOK, err)
 	}
 
 	c.Bind(&req)
@@ -123,14 +123,14 @@ func (EquipCtrl) UpdateUsersEquipments(c echo.Context) error {
 // @Success 0
 // @Failure 9011
 // @Router /members/{memberId}/equipments [delete]
-func (EquipCtrl) DeleteUsersEquipments(c echo.Context) error {
+func (Equip) DeleteUsersEquipments(c echo.Context) error {
 	var res response.JSONResult
 	var req equipsRequest
 	memberID := c.Param("memberId")
 	db, _ := c.Get("db").(*gorm.DB)
 
-	if _, err := services.Init(c).ValidMember(memberID); err != nil {
-		return err
+	if _, err := services.ValidMember(memberID); err.Code != 0 {
+		return c.JSON(http.StatusOK, err)
 	}
 
 	c.Bind(&req)
