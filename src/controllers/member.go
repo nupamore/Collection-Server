@@ -67,7 +67,7 @@ func (Member) GetMember(c echo.Context) error {
 	id := c.Param("memberId")
 
 	member, err := services.ValidMember(id)
-	if err.Code != 0 {
+	if err != nil {
 		return c.JSON(http.StatusOK, err)
 	}
 	res.Data = member
@@ -89,7 +89,7 @@ func (Member) UpdateMember(c echo.Context) error {
 	id := c.Param("memberId")
 
 	before, err := services.ValidMember(id)
-	if err.Code != 0 {
+	if err != nil {
 		return c.JSON(http.StatusOK, err)
 	}
 
@@ -113,7 +113,7 @@ func (Member) DeleteMember(c echo.Context) error {
 	id := c.Param("memberId")
 
 	member, err := services.ValidMember(id)
-	if err.Code != 0 {
+	if err != nil {
 		return c.JSON(http.StatusOK, err)
 	}
 	db.Delete(member)

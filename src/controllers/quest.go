@@ -31,7 +31,7 @@ func (Quest) GetUsersQuests(c echo.Context) error {
 	memberID := c.Param("memberId")
 	db, _ := c.Get("db").(*gorm.DB)
 
-	if _, err := services.ValidMember(memberID); err.Code != 0 {
+	if _, err := services.ValidMember(memberID); err != nil {
 		return c.JSON(http.StatusOK, err)
 	}
 
@@ -54,7 +54,7 @@ func (Quest) CreateUsersQuests(c echo.Context) error {
 	memberID := c.Param("memberId")
 	db, _ := c.Get("db").(*gorm.DB)
 
-	if _, err := services.ValidMember(memberID); err.Code != 0 {
+	if _, err := services.ValidMember(memberID); err != nil {
 		return c.JSON(http.StatusOK, err)
 	}
 
@@ -89,7 +89,7 @@ func (Quest) UpdateUsersQuests(c echo.Context) error {
 	memberID := c.Param("memberId")
 	db, _ := c.Get("db").(*gorm.DB)
 
-	if _, err := services.ValidMember(memberID); err.Code != 0 {
+	if _, err := services.ValidMember(memberID); err != nil {
 		return c.JSON(http.StatusOK, err)
 	}
 
@@ -129,7 +129,7 @@ func (Quest) DeleteUsersQuests(c echo.Context) error {
 	memberID := c.Param("memberId")
 	db, _ := c.Get("db").(*gorm.DB)
 
-	if _, err := services.ValidMember(memberID); err.Code != 0 {
+	if _, err := services.ValidMember(memberID); err != nil {
 		return c.JSON(http.StatusOK, err)
 	}
 

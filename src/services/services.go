@@ -7,17 +7,18 @@ import (
 	"github.com/nupamore/Collection-Server/src/database/models"
 )
 
+var errRes = response.JSONResult{
+	Code:    response.StatusNotExistMember,
+	Message: response.StatusText(response.StatusNotExistMember),
+}
+
 // ValidMember : Check exist member and return info
-func ValidMember(memberID string) (models.Member, response.JSONResult) {
+func ValidMember(memberID string) (member models.Member, res *response.JSONResult) {
 	db := database.DB
-	var res response.JSONResult
-	var member models.Member
 
 	if err := db.Where("id = ?", memberID).First(&member).Error; gorm.IsRecordNotFoundError(err) {
-		res.Code = response.StatusNotExistMember
-		res.Message = response.StatusText(res.Code)
-		return member, res
+		return member, &errRes
 	}
 
-	return member, res
+	return member, nil
 }
