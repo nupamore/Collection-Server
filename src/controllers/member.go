@@ -3,6 +3,7 @@ package controllers
 import (
 	"net/http"
 
+	"github.com/fatih/structs"
 	"github.com/jinzhu/gorm"
 	"github.com/labstack/echo/v4"
 	"github.com/nupamore/Collection-Server/src/controllers/response"
@@ -95,7 +96,7 @@ func (Member) UpdateMember(c echo.Context) error {
 
 	var after models.Member
 	c.Bind(&after)
-	db.Model(&before).Update(after)
+	db.Model(&before).Update(structs.Map(after))
 	res.Message = response.StatusText(response.StatusUpdated)
 
 	return c.JSON(http.StatusOK, res)

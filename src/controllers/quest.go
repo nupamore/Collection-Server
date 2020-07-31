@@ -6,6 +6,7 @@ import (
 	"github.com/nupamore/Collection-Server/src/database"
 	"github.com/nupamore/Collection-Server/src/services"
 
+	"github.com/fatih/structs"
 	"github.com/jinzhu/gorm"
 	"github.com/labstack/echo/v4"
 	"github.com/nupamore/Collection-Server/src/controllers/response"
@@ -98,13 +99,13 @@ func (Quest) UpdateUsersQuests(c echo.Context) error {
 		after.MemberID = memberID
 		var before models.Quest
 		// 존재하는지 체크
-		if err := db.Where("id = ?", after.ID).First(&before).Error; gorm.IsRecordNotFoundError(err) {
+		if err := db.Where("questKey = ? AND memberId = ?", after.QuestKey, after.MemberID).First(&before).Error; gorm.IsRecordNotFoundError(err) {
 			res.Code = response.StatusNotExist
 			res.Message = response.StatusText(res.Code)
 			return c.JSON(http.StatusOK, res)
 		}
 		// 업데이트 시도
-		if err := db.Model(&before).Update(after).Error; err != nil {
+		if err := db.Model(&before).Update(structs.Map(after)).Error; err != nil {
 			code, message := database.ParseError(err)
 			res.Code = code
 			res.Message = message

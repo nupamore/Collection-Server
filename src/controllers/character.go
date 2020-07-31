@@ -3,6 +3,7 @@ package controllers
 import (
 	"net/http"
 
+	"github.com/fatih/structs"
 	"github.com/nupamore/Collection-Server/src/database"
 	"github.com/nupamore/Collection-Server/src/services"
 
@@ -104,7 +105,7 @@ func (Char) UpdateUsersCharacters(c echo.Context) error {
 			return c.JSON(http.StatusOK, res)
 		}
 		// 업데이트 시도
-		if err := db.Model(&before).Update(after).Error; err != nil {
+		if err := db.Model(&before).Update(structs.Map(after)).Error; err != nil {
 			code, message := database.ParseError(err)
 			res.Code = code
 			res.Message = message

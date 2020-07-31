@@ -6,6 +6,7 @@ require (
 	github.com/Shelnutt2/db2struct v1.0.1 // indirect
 	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751
 	github.com/cpuguy83/go-md2man/v2 v2.0.0 // indirect
+	github.com/fatih/structs v1.1.0
 	github.com/go-openapi/spec v0.19.9 // indirect
 	github.com/go-openapi/swag v0.19.9 // indirect
 	github.com/jinzhu/gorm v1.9.15
